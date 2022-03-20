@@ -2,6 +2,8 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from rest_framework.generics import GenericAPIView
 import uuid, re
+import requests
+import os
 
 
 class BaseModel(models.Model):
@@ -84,4 +86,16 @@ class BaseModel(models.Model):
 
 
 class View(GenericAPIView):
-    pass
+    @property
+    def user(self):
+        token = self.request.headers.get("Authorization")
+
+        if not token:
+            return None
+
+        url = os.environ.get("USER_SERVICE_API_URL") + "profile/"
+        user_response = requests.get(
+            url, headers={"Authorization": token, "Content-Type": "application/json"}
+        )
+
+        return user_response.json()
