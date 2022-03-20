@@ -19,7 +19,7 @@ class Discussion(BaseModel):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = self.unique_slugify(self.title, "slug")
+            self.unique_slugify(self.title, "slug")
 
         super(Discussion, self).save(*args, **kwargs)
 
@@ -28,6 +28,10 @@ class Discussion(BaseModel):
     @property
     def user(self):
         return self.user_id
+
+    @property
+    def replies(self):
+        return Reply.objects.filter(discussion_id=self.id)
 
 
 class Reply(BaseModel):
