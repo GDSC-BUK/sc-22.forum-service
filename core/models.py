@@ -5,7 +5,7 @@ from forum.utils import BaseModel
 
 class Discussion(BaseModel):
 
-    user_id = models.UUIDField(db_index=True, editable=False)
+    user_id = models.UUIDField(db_index=True)
     title = models.CharField(max_length=255, blank=False)
     body = models.TextField()
     slug = models.SlugField(max_length=255, unique=True, blank=True)
@@ -36,7 +36,7 @@ class Discussion(BaseModel):
 
 class Reply(BaseModel):
 
-    user_id = models.UUIDField(editable=False)
+    user_id = models.UUIDField()
     discussion = models.ForeignKey(Discussion, on_delete=models.CASCADE)
     body = models.TextField(blank=False)
     reply = models.ForeignKey(
