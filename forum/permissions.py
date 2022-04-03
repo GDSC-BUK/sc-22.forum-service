@@ -9,7 +9,11 @@ class IsAuthenticatedOrReadOnly(BasePermission):
         if request.META.get("REQUEST_METHOD") == "GET":
             return True
 
-        token = request.META.get("HTTP_AUTHORIZATION")
+        token = (
+            request.META.get("HTTP_AUTHORIZATION")
+            or request.META.get("Authorization")
+            or view.headers.get("Authorization")
+        )
         is_authenticated = self.is_authenticated(token)
 
         return is_authenticated
